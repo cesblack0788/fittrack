@@ -1,13 +1,13 @@
-﻿﻿// FitTrack App
+// FitTrack App
 
 const KEYS={history:'ft_h',xp:'ft_x',badges:'ft_b',streak:'ft_s',lastDate:'ft_l'};
-function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
 const XP_VAL={run:50,strength:30};
 const LEVELS=[0,100,250,450,700,1000,1400,1900,2500,3200,4000];
 const BADGES=[
   {id:'first_run', emoji:'🏃',name:'First Mile',   desc:'Complete your first HIIT run.',         check:(h)=>h.filter(x=>x.type==='run').length>=1},
-  {id:'first_str', emoji:'💪',name:'Iron Will',    desc:'Complete your first strength workout.',  check:(h)=>h.filter(x=>x.type==='strength').length>=1},
+  {id:'first_str', emoji:'��',name:'Iron Will',    desc:'Complete your first strength workout.',  check:(h)=>h.filter(x=>x.type==='strength').length>=1},
   {id:'streak_3',  emoji:'🔥',name:'On Fire',      desc:'Work out 3 days in a row.',              check:(_,s)=>s>=3},
   {id:'streak_7',  emoji:'⚡',name:'Week Warrior', desc:'Work out 7 days in a row.',              check:(_,s)=>s>=7},
   {id:'streak_14', emoji:'🌟',name:'Unstoppable',  desc:'Work out 14 days in a row.',             check:(_,s)=>s>=14},
@@ -142,7 +142,7 @@ function showToast(type,msg){
   setTimeout(()=>{t.style.animation='slideOut .3s ease forwards';setTimeout(()=>t.remove(),300);},3000);
 }
 function logWorkout(type,details){
-  const entry=Object.assign({id:Date.now(),date:new Date().toISOString(),type:type},details);
+  const entry={id:Date.now(),date:new Date().toISOString(),type,...details};
   history.unshift(entry); save(KEYS.history,history);
   updateStreak();
   addXP(type==='run'?XP_VAL.run:XP_VAL.strength,type==='run'?'HIIT run complete!':'Strength workout logged!');
